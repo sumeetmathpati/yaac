@@ -1,0 +1,71 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:yaac/data/params_controller_provider.dart';
+import 'package:yaac/models/name_value.dart';
+import 'package:yaac/widgets/text_field.dart';
+
+import 'constants.dart';
+
+class NameValueTextFieldWidget extends ConsumerStatefulWidget {
+  final String? initialValue;
+  final ProviderListenable<TextEditingController> provider;
+  final Refreshable notifier;
+  final NameValueType type;
+  final Function(String)? onChanged;
+
+  const NameValueTextFieldWidget(
+      {super.key,
+      required this.type,
+      this.initialValue,
+      required this.provider,
+      required this.notifier,
+      this.onChanged,
+      });
+
+  @override
+  ConsumerState<NameValueTextFieldWidget> createState() =>
+      _NameValueTextFieldWidgetState();
+}
+
+class _NameValueTextFieldWidgetState
+    extends ConsumerState<NameValueTextFieldWidget> {
+  // TextEditingController? controller;
+  String text = '';
+
+  @override
+  void initState() {
+
+    super.initState();
+    print('--');
+    print(widget.initialValue);
+    text = widget.initialValue ?? "";
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // if (controller != null) {
+    //   controller!.text = text;
+    //   controller!.selection = TextSelection.fromPosition(
+    //       TextPosition(offset: controller!.text.length));
+    // }
+
+    return TextFieldWidget(
+      // controller: controller,
+      initialValue: text,
+      hint: widget.type.hintName(),
+      onTap: () {
+        setState(() {
+          // controller = ref.read(widget.provider);
+        });
+      },
+      onChanged: (val) {
+        if (widget.onChanged != null) {
+          widget.onChanged!(val);
+        }
+        setState(() {
+          text = val;
+        });
+      },
+    );
+  }
+}
